@@ -1,5 +1,7 @@
-import demistomock as demisto  # noqa: F401
-from CommonServerPython import *  # noqa: F401
+register_module_line('SendEmailOnSLABreach', 'start', __line__())
+### pack version: 1.14.15
+
+
 
 """
 This script is used to send an email about a breached SLA. The script, by default, sends the email to the assignee of the
@@ -38,9 +40,10 @@ def get_subject():
     return subject
 
 
-def send_email(to, subject, body):
+def send_email(to, cc,subject, body):
     demisto.results(demisto.executeCommand('send-mail', {
         "to": to,
+        "cc": cc,
         "subject": subject,
         "body": body}))
 
@@ -56,12 +59,15 @@ def get_body():
 
 def main():
     email_to = get_owner_email()
+    email_cc= "manager@domain.com","example@domain.com"
     email_subject = get_subject()
     email_body = get_body()
 
     if email_to:
-        send_email(email_to, email_subject, email_body)
+        send_email(email_to, email_cc, email_subject, email_body)
 
 
 if __name__ == "__builtin__" or __name__ == "builtins":
     main()
+
+register_module_line('SendEmailOnSLABreach', 'end', __line__())
